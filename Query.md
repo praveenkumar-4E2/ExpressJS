@@ -1,3 +1,5 @@
+[Guidelines](#guidelines)
+
 # 1. Understanding Query Strings
 
 ## 1.1 What is a Query String?
@@ -206,3 +208,113 @@ app.get('/products', (req, res) => {
 - **Use Encoding:** Properly encode and decode query parameters to handle special characters.
 
 - **Handle Optional Parameters:** Provide default values or handle cases where parameters are missing.
+
+
+<br></br>
+
+
+# Guidelines
+
+
+1. Keep URLs Short and Descriptive
+
+- **Avoid Long URLs:** Long query strings can be difficult to read and may break on some systems.
+
+- **Use Meaningful Names:** Choose descriptive and meaningful key names.
+    - Bad: `?x=123`
+    - Good:` ?product_id=123`
+
+<br></br>
+
+
+2. Use Lowercase and Hyphens
+- URLs are case-insensitive and lowercase is preferred. Use hyphens `(-)` to separate words for better readability.
+    - **Good:** `/search?sort=price-low-to-high`
+    - **Bad:**` /search?Sort=PriceLowToHigh`
+
+<br></br>
+
+
+3. Limit the Number of Query Parameters
+
+- Only include necessary parameters to avoid making URLs overly complicated. Keep the number of query parameters small to improve readability and performance.
+
+    - **Good**: `/search?category=books&sort=price`
+    - **Bad**: `/search?category=books&sort=price&limit=10&user_id=123&seller=abc`
+
+<br></br>
+
+
+4. Encode Special Characters
+
+- Use URL encoding for special characters (e.g., spaces, &, =). This ensures URLs are transmitted properly over the web.
+    - **Example**: `A space should be encoded as %20.`
+    - **Bad**: `/search?query=hello world`
+    - **Good**: `/search?query=hello%20world`
+
+<br></br>
+
+
+5. Handle Arrays and Nested Objects Properly
+
+- When passing arrays or objects, structure the query string so that the server can easily interpret it.
+    - For Arrays:
+        - **Good**: `/products?category=books,electronics`
+        - **Good (Alternative):** `/products?category[]=books&category[]=electronics`
+    - For Nested Objects:
+        - **Good:** `/user?profile[name]=john&profile[age]=30`
+
+<br></br>
+
+
+6. Use Consistent Naming Conventions
+
+- Be consistent in how you name your query parameters across the application. Stick to one naming style, such as camelCase or snake_case.
+
+    - **Good:**` /search?category_id=123`
+    - **Bad:** `/search?CategoryID=123`
+
+<br></br>
+
+
+7. Use Pagination for Large Data Sets
+
+- Instead of fetching large amounts of data in a single request, use pagination in query strings.
+    - **Example:** `/products?page=2&limit=20`
+
+<br></br>
+
+
+8. Avoid Sensitive Information in Query Strings
+- Never include sensitive information like passwords, tokens, or personal identifiers in query strings. These can be easily logged or exposed in browser history.
+    - **Bad:** `/user?password=mysecretpassword`
+    - **Good:** `Use POST requests with parameters in the body for sensitive data.`
+
+<br></br>
+
+
+9. Ensure Backward Compatibility
+
+- If you update query parameters, ensure that older versions of your URLs (e.g., used in bookmarks) still function correctly. If necessary, redirect old URLs to the new ones.
+
+<br></br>
+
+
+10. Use Default Values for Missing Parameters
+
+- Handle missing or optional parameters by setting default values on the server-side.
+    - **Example**: If `limit` is missing in` /products?sort=price`, set a default value for `limit`.
+
+<br></br>
+
+11. Avoid Redundant Parameters
+
+- Avoid passing the same data multiple times in different query parameters.
+    - **Bad:**` /search?query=javascript&term=javascript`
+    - **Good:** `/search?query=javascript`
+
+<br></br>
+
+
+12. Use HTTPS
+- Always use https to encrypt the transmission of query strings and ensure security.
