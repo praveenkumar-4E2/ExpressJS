@@ -7,7 +7,7 @@
 
 Example Project Structure:
 
-```
+```js
 /controllers      # Controllers for route handling logic
 /models           # Database models
 /routes           # Route definitions and middleware
@@ -26,13 +26,13 @@ app.js            # Main app file
 
 - Use the `dotenv` package to load environment variables from ```.env``` file into ```process.env.```
 
-```
+```js
 # .env
 DB_HOST=localhost
 DB_PORT=5432
 JWT_SECRET=supersecretkey
 ```
-```
+```js
 // app.js
 require('dotenv').config();
 const dbHost = process.env.DB_HOST;
@@ -43,7 +43,7 @@ const dbHost = process.env.DB_HOST;
 **Principle:** Separate your route logic into different modules based on functionality to keep the code clean and easier to manage.
 Example:
 
-```
+```js
 // routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
@@ -55,7 +55,7 @@ router.post('/users', userController.createUser);
 module.exports = router;
 ```
 
-```
+```js
 // app.js
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
@@ -74,7 +74,7 @@ app.use('/api', userRoutes);
     - **Morgan:** HTTP request logging.
 
 
-```
+```js
 const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
@@ -94,7 +94,7 @@ app.use('/api', userRoutes);    // Use routes with middleware
 
 Example Error Handler:
 
-```
+```js
 // middleware/errorHandler.js
 function errorHandler(err, req, res, next) {
     console.error(err.stack);
@@ -104,7 +104,7 @@ function errorHandler(err, req, res, next) {
 module.exports = errorHandler;
 ```
 
-```
+```js
 // app.js
 const errorHandler = require('./middleware/errorHandler');
 app.use(errorHandler);
@@ -116,7 +116,7 @@ app.use(errorHandler);
 
 **Principle:** Since Express.js doesn’t handle promise rejections automatically, use `try-catch` or error-handling middleware to prevent unhandled promise rejections.
 
-```
+```js
 // controller/userController.js
 const getUser = async (req, res, next) => {
   try {
@@ -138,7 +138,7 @@ const getUser = async (req, res, next) => {
 
 - Use libraries like `Joi`,    `express-validator`, or `validator.js` for input validation.
 
-```
+```js
 const { body, validationResult } = require('express-validator');
 
 app.post('/register',
@@ -165,7 +165,7 @@ app.post('/register',
 - Sanitize user input.
 - Ensure that sensitive data like JWT tokens and session data are protected.
 
-```
+```js
 const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,  // 15 minutes
@@ -181,7 +181,7 @@ app.use(limiter);
 
 - Use asynchronous functions for tasks like database operations and external API calls.
 
-```
+```js
 // Bad: Blocking I/O
 const fs = require('fs');
 app.get('/file', (req, res) => {
@@ -205,7 +205,7 @@ app.get('/file', async (req, res) => {
 - Define your coding rules in ```.eslintrc file.```
 - Use popular configurations like  ```eslint:recommended``` or extend configurations like ```airbnb```.
 
-```
+```js
 # Install ESLint
 npm install eslint --save-dev
 
@@ -219,7 +219,7 @@ npm install eslint --save-dev
 
 **Principle:** Always use Git for version control and maintain meaningful commit messages. Use ```.gitignore``` to exclude files that shouldn't be in your repository (e.g., `node_modules`, `.env`).
 
-```
+```js
 # .gitignore
 node_modules/
 .env
@@ -230,7 +230,7 @@ node_modules/
 ### 12. Implement Logging
 **Principle:** Use logging for debugging and monitoring production issues. The ```morgan``` library is commonly used for HTTP request logging.
 
-```
+```js
 const morgan = require('morgan');
 app.use(morgan('combined'));
 ```
@@ -243,7 +243,7 @@ For production, you can integrate with a logging service like Winston for more r
 ### 13. Use CORS Correctly
 **Principle:** Configure CORS (Cross-Origin Resource Sharing) properly to allow only authorized domains to access your API.
 
-```
+```js
 const cors = require('cors');
 const allowedOrigins = ['https://yourwebsite.com', 'https://anotherdomain.com'];
 
@@ -266,7 +266,7 @@ app.use(cors({
 - **Compression:** Use the `compression` middleware to compress response bodies.
 - **Caching:** Use caching headers `(Cache-Control)` or tools like Redis to cache frequently requested data.
 
-```
+```js
 const compression = require('compression');
 app.use(compression());  // Enable response compression
 ```
@@ -276,7 +276,7 @@ app.use(compression());  // Enable response compression
 ### 15. Write Unit Tests
 **Principle:** Write unit tests to ensure the reliability of your code. Use testing frameworks like **Mocha**, **Chai**, or **Jest**.
 
-```
+```js
 const request = require('supertest');
 const app = require('../app');  // Import your Express app
 
