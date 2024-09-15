@@ -1,4 +1,6 @@
-[Guidelines](#guidelines)
+[Query](#guidelines)
+
+[Query REGEX](#regex)
 
 # 1. Understanding Query Strings
 
@@ -318,3 +320,259 @@ app.get('/products', (req, res) => {
 
 12. Use HTTPS
 - Always use https to encrypt the transmission of query strings and ensure security.
+
+
+<br></br>
+
+
+# REGEX
+
+1. Basics
+
+- Literal Match
+
+
+
+```js
+^abc$     # Matches "abc"
+```
+
+- Any Character
+
+```js
+
+^a.c$     # Matches "abc", "a1c", etc.
+```
+
+- Zero or More Characters
+
+
+```js
+^a.*c$    # Matches "ac", "abc", "a123c", etc.
+```
+
+
+- One or More Characters
+
+
+```js
+^a.+c$    # Matches "abc", "a123c" but not "ac"
+```
+
+- Zero or One Character
+
+
+```js
+^a?c$     # Matches "c", "ac"
+```
+
+- Character Set
+
+
+```js
+^[abc]$   # Matches "a", "b", or "c"
+```
+
+- Negated Character Set
+
+
+```js
+^[^abc]$  # Matches any character except "a", "b", or "c"
+```
+
+- Group and Capture
+
+
+```js
+^(abc|def)$  # Matches "abc" or "def"
+```
+
+2. Dynamic Segments
+
+- Capture a Single Number
+
+
+```js
+^\/users\/(\d+)$  # Matches "/users/123", capturing "123"
+```
+
+- Capture Alphanumeric String
+
+```js
+^\/items\/([a-zA-Z0-9_-]+)$  # Matches "/items/item-123", capturing "item-123"
+```
+
+- Capture Multiple Segments
+
+
+```js
+^\/users\/(\d+)\/posts\/(\d+)$  # Matches "/users/123/posts/456", capturing "123" and "456"
+```
+
+3. **Optional and Named Parameters**
+
+- Optional Segment
+
+
+```js
+^\/users(?:\/(\d+))?$  # Matches "/users" or "/users/123", capturing "123" if it exists
+```
+
+- Named Groups
+
+
+```js
+^\/users\/(?<userId>\d+)\/posts\/(?<postId>\d+)$  # Matches "/users/123/posts/456", capturing "123" as userId and "456" as postId
+```
+
+4. **Complex Patterns**
+
+- Optional Parameter with Default Value
+
+
+```js
+^\/products(?:\/(\d+))?$  # Matches "/products" or "/products/123"
+```
+
+- Path with Query Parameters
+
+
+```js
+^\/search\?query=([^&]+)$  # Matches "/search?query=example", capturing "example"
+```
+
+- File Extension
+
+
+```js
+^\/files\/.*\.(jpg|png|gif)$  # Matches files with .jpg, .png, or .gif extension
+```
+
+5. **Anchors and Boundaries**
+
+- Start of String
+
+
+```js
+^\/api\/  # Matches paths starting with "/api/"
+```
+
+- End of String
+
+
+```js
+\/end$  # Matches paths ending with "/end"
+```
+
+- Word Boundaries
+
+
+```js
+\bword\b  # Matches "word" as a whole word
+```
+
+6. **Advanced Matching**
+
+- Lookahead (Positive)
+
+
+```js
+^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$  # Matches passwords with at least one digit, one lowercase letter, and one uppercase letter, and at least 6 characters long
+```
+
+- Lookahead (Negative)
+
+
+```js
+^(?!.*password).*  # Matches strings that do not contain "password"
+```
+
+- Lookbehind (Positive)
+
+
+```js
+(?<=@)\w+  # Matches words preceded by "@"
+```
+
+- Lookbehind (Negative)
+
+
+```js
+(?<!@)\w+  # Matches words not preceded by "@"
+```
+
+7. **Common Path Patterns**
+
+- Match Root Path
+
+
+```js
+^\/$  # Matches "/"
+```
+
+- Match Subdirectories
+
+
+```js
+^\/([^\/]+)\/([^\/]+)$  # Matches "/dir/subdir", capturing "dir" and "subdir"
+```
+
+- Match Multiple Levels
+
+```js
+
+^\/(.+)\/(.+)\/(.+)$  # Matches "/level1/level2/level3", capturing each level
+```
+
+- Match Dynamic Segments with Constraints
+
+
+```js
+^\/items\/([a-zA-Z0-9]{5,10})$  # Matches "/items/abc123", capturing alphanumeric strings of length 5 to 10
+```
+
+8. **Example Implementations**
+
+- Node.js Example
+
+
+```js
+const url = '/users/123/posts/456';
+const regex = /^\/users\/(\d+)\/posts\/(\d+)$/;
+const match = regex.exec(url);
+
+if (match) {
+  const [fullMatch, userId, postId] = match;
+  console.log(`User ID: ${userId}, Post ID: ${postId}`);
+}
+```
+
+
+- Express.js Example
+
+```js
+const express = require('express');
+const app = express();
+
+// Route with regex
+app.get(/^\/items\/([a-zA-Z0-9_-]+)\/([0-9]+)$/, (req, res) => {
+  const [_, itemId, quantity] = req.params;
+  res.send(`Item ID: ${itemId}, Quantity: ${quantity}`);
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+```
+
+
+
+**Summary**
+
+- **Basics**: Literal matches, wildcards, and character sets.
+- **Dynamic Segments:** Capture numbers, alphanumeric strings, and multiple segments.
+- **Optional and Named Parameters:** Use optional segments and named groups for clarity.
+- **Complex Patterns:** Handle query parameters, file extensions, and more.
+- **Advanced Matching: **Use lookahead/lookbehind assertions for complex validatio
+ns.
+- **Common Paths:** Match roots, subdirectories, and multiple levels.
