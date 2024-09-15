@@ -1,4 +1,4 @@
-[Query](#guidelines)
+[Query+](#guidelines)
 
 [Query REGEX](#regex)
 
